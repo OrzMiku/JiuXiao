@@ -19,6 +19,7 @@ layout(location = 2) out vec4 encodedNormal;
 void main(){
     vec4 color = texture(colortex0, texCoord) * terrainColor;
     if(color.a < 0.1) discard;
+    color.rgb = pow(color.rgb, vec3(2.2));
     fragColor = color;
 
     lightmapData = vec4(lightmapCoord, 0.0, 1.0);

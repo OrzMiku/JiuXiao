@@ -33,12 +33,10 @@ vec3 calculateLighting(vec3 normal){
 }
 
 void main(){
-    vec4 color = texture(colortex0, texCoord);
-    vec4 depth = texture(depthtex0, texCoord);
+    fragColor = texture(colortex0, texCoord);
+    float depth = texture(depthtex0, texCoord).r;
+    if(depth == 1.0) return;
     vec3 normal = texture(colortex2, texCoord).rgb * 2.0 - 1.0;
-    if(depth.r == 1.0) discard;
     vec3 lighting = calculateLighting(normal);
-    color.rgb *= lighting;
-    // color.rgb = normal;
-    fragColor = color;
+    fragColor.rgb *= lighting;
 }
