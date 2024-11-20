@@ -112,12 +112,12 @@ void main(){
     vec3 shadow = getSoftShadow(shadowClipPos);
 
     vec3 blocklight = texture(colortex1, texCoord).r * blocklightColor;
-    vec3 skylight = texture(colortex2, texCoord).g * skylightColor;
+    vec3 skylight = texture(colortex1, texCoord).g * skylightColor;
     vec3 ambient = ambientColor;
     vec3 lightVector = normalize(shadowLightPosition);
     vec3 worldLightVector = mat3(gbufferModelViewInverse) * lightVector;
     float lightDot = max(dot(normal, worldLightVector), 0.0);
     vec3 sunlight = sunlightColor * lightDot * shadow;
-
+    
     color.rgb *= blocklight + skylight + ambient + sunlight;
 }
