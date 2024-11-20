@@ -1,9 +1,7 @@
 #version 450 core
 
-// ----- Input -----
-in vec2 texCoord;
-
 // ----- Uniforms -----
+
 uniform sampler2D colortex0;
 uniform sampler2D colortex1;
 uniform sampler2D colortex2;
@@ -11,10 +9,17 @@ uniform sampler2D depthtex0;
 uniform vec3 shadowLightPosition;
 uniform mat4 gbufferModelViewInverse;
 
+// ----- Input -----
+
+in vec2 texCoord;
+
+// ----- Output -----
+
 /* RENDERTARGETS: 0 */
-layout(location = 0) out vec4 fragColor;
+layout(location = 0) out vec4 color;
 
 // ----- Constants -----
+
 const vec3 blocklightColor = vec3(1.0, 0.5, 0.08);
 const vec3 skylightColor = vec3(0.05, 0.15, 0.3);
 const vec3 sunlightColor = vec3(1.0);
@@ -33,10 +38,10 @@ vec3 calculateLighting(vec3 normal){
 }
 
 void main(){
-    fragColor = texture(colortex0, texCoord);
+    color = texture(colortex0, texCoord);
     float depth = texture(depthtex0, texCoord).r;
     if(depth == 1.0) return;
     vec3 normal = texture(colortex2, texCoord).rgb * 2.0 - 1.0;
     vec3 lighting = calculateLighting(normal);
-    fragColor.rgb *= lighting;
+    color.rgb *= lighting;
 }
