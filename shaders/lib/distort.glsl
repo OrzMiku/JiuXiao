@@ -1,3 +1,8 @@
+// ----- Parameters -----
+
+#define SHADOW_QUALITY 3.0
+#define SHADOW_SOFTNESS 3.0
+
 // ----- Constants -----
 
 const float shadowMapResolution = 2048.0;

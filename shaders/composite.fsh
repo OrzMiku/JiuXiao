@@ -1,10 +1,5 @@
 #version 450 core
 
-// ----- Parameters -----
-
-#define SHADOW_QUALITY 2.0
-#define SHADOW_SOFTNESS 1.0
-
 // ----- Includes -----
 #include "lib/distort.glsl"
 
@@ -67,6 +62,10 @@ vec3 getShadow(vec3 shadowScreenPos){
     return shadowColor.rgb - shadowColor.a;
 }
 
+float getBias(vec3 worldLightVector, vec3 normal){
+    return max(0.001, 0.01 * (1.0 - dot(worldLightVector, normal)));
+}
+
 vec3 getSoftShadow(vec4 shadowClipPos){
     const float range = SHADOW_SOFTNESS / 2.0;
     const float increment = range / SHADOW_QUALITY;
@@ -84,7 +83,10 @@ vec3 getSoftShadow(vec4 shadowClipPos){
         for (float y = -range; y <= range; y+= increment){
         vec2 offset = rotation * vec2(x, y) / shadowMapResolution;
         vec4 offsetShadowClipPos = shadowClipPos + vec4(offset, 0.0, 0.0);
-        offsetShadowClipPos.z -= 0.001;
+        vec3 normal = texture(colortex2, texCoord).rgb * 2.0 - 1.0;
+        vec3 worldLightVector = mat3(gbufferModelViewInverse) * normalize(shadowLightPosition);
+        float bias = getBias(worldLightVector, normal);
+        offsetShadowClipPos.z -= bias;
         offsetShadowClipPos.xyz = distortShadowClipPos(offsetShadowClipPos.xyz);
         vec3 shadowNDCPos = offsetShadowClipPos.xyz / offsetShadowClipPos.w;
         vec3 shadowScreenPos = shadowNDCPos * 0.5 + 0.5;
