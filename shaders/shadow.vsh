@@ -1,11 +1,12 @@
 #version 450 core
 
 // ----- Includes -----
-#include "lib/distort.glsl"
+#include "/lib/function/distort.glsl"
 
 // ----- Uniforms -----
 
 uniform vec3 chunkOffset;
+
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 textureMatrix;

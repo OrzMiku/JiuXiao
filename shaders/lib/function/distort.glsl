@@ -1,7 +1,7 @@
 // ----- Parameters -----
 
-#define SHADOW_QUALITY 3.0
-#define SHADOW_SOFTNESS 3.0
+#define SHADOW_QUALITY 2.0
+#define SHADOW_SOFTNESS 1.0
 
 // ----- Constants -----
 

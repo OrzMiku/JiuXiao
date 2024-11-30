@@ -1,7 +1,8 @@
 #version 450 core
 
 // ----- Includes -----
-#include "lib/distort.glsl"
+#include "/lib/function/util.glsl"
+#include "/lib/function/distort.glsl"
 
 // ----- Uniforms -----
 
@@ -13,13 +14,18 @@ uniform sampler2D shadowtex0;
 uniform sampler2D shadowtex1;
 uniform sampler2D shadowcolor0;
 uniform sampler2D noisetex;
+
+uniform int worldTime;
+
+uniform float viewWidth;
+uniform float viewHeight;
+
 uniform vec3 shadowLightPosition;
+
 uniform mat4 gbufferModelViewInverse;
 uniform mat4 gbufferProjectionInverse;
 uniform mat4 shadowModelView;
 uniform mat4 shadowProjection;
-uniform float viewWidth;
-uniform float viewHeight;
 
 // ----- Input -----
 
@@ -36,14 +42,6 @@ const vec3 blocklightColor = vec3(1.0, 0.5, 0.08);
 const vec3 skylightColor = vec3(0.05, 0.15, 0.3);
 const vec3 sunlightColor = vec3(1.0);
 const vec3 ambientColor = vec3(0.1);
-
-// ----- Functions -----
-
-vec3 projectAndDivide(mat4 projectionMatrix, vec3 position){
-    vec4 clipSpace = projectionMatrix * vec4(position, 1.0);
-    vec3 ndcSpace = clipSpace.xyz / clipSpace.w;
-    return ndcSpace;
-}
 
 vec4 getNoise(vec2 uv){
     ivec2 screenPos = ivec2(uv * vec2(viewWidth, viewHeight));
@@ -62,10 +60,6 @@ vec3 getShadow(vec3 shadowScreenPos){
     return shadowColor.rgb - shadowColor.a;
 }
 
-float getBias(vec3 worldLightVector, vec3 normal){
-    return max(0.001, 0.01 * (1.0 - dot(worldLightVector, normal)));
-}
-
 vec3 getSoftShadow(vec4 shadowClipPos){
     const float range = SHADOW_SOFTNESS / 2.0;
     const float increment = range / SHADOW_QUALITY;
@@ -81,21 +75,32 @@ vec3 getSoftShadow(vec4 shadowClipPos){
 
     for(float x = -range; x <= range; x += increment){
         for (float y = -range; y <= range; y+= increment){
-        vec2 offset = rotation * vec2(x, y) / shadowMapResolution;
-        vec4 offsetShadowClipPos = shadowClipPos + vec4(offset, 0.0, 0.0);
-        vec3 normal = texture(colortex2, texCoord).rgb * 2.0 - 1.0;
-        vec3 worldLightVector = mat3(gbufferModelViewInverse) * normalize(shadowLightPosition);
-        float bias = getBias(worldLightVector, normal);
-        offsetShadowClipPos.z -= bias;
-        offsetShadowClipPos.xyz = distortShadowClipPos(offsetShadowClipPos.xyz);
-        vec3 shadowNDCPos = offsetShadowClipPos.xyz / offsetShadowClipPos.w;
-        vec3 shadowScreenPos = shadowNDCPos * 0.5 + 0.5;
-        shadowAccum += getShadow(shadowScreenPos);
-        samples++;
+            vec2 offset = rotation * vec2(x, y) / shadowMapResolution;
+            vec4 offsetShadowClipPos = shadowClipPos + vec4(offset, 0.0, 0.0);
+            offsetShadowClipPos.xyz = distortShadowClipPos(offsetShadowClipPos.xyz);
+            offsetShadowClipPos.z -= 0.001;
+            vec3 shadowNDCPos = offsetShadowClipPos.xyz / offsetShadowClipPos.w;
+            vec3 shadowScreenPos = shadowNDCPos * 0.5 + 0.5;
+            shadowAccum += getShadow(shadowScreenPos);
+            samples++;
         }
     }
 
     return shadowAccum / float(samples);
+}
+
+float getLightIntensity(){
+    float time = float(worldTime % 24000);
+
+    if(time < 1000 || time > 23215) {
+        return mix(0.1, 1.0, mod(time + 785, 24000) / 1785);
+    }else if(time < 12000){
+        return 1.0;
+    }else if(time < 12785){
+        return mix(1.0, 0.1, time - 12000 / 785);
+    }else{
+        return 0.1;
+    }
 }
 
 void main(){
@@ -120,6 +125,9 @@ void main(){
     vec3 worldLightVector = mat3(gbufferModelViewInverse) * lightVector;
     float lightDot = max(dot(normal, worldLightVector), 0.0);
     vec3 sunlight = sunlightColor * lightDot * shadow;
+
+    skylight *= getLightIntensity();
+    sunlight *= getLightIntensity();
     
     color.rgb *= blocklight + skylight + ambient + sunlight;
 }
