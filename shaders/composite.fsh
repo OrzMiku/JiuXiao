@@ -43,6 +43,10 @@ const vec3 skylightColor = vec3(0.05, 0.15, 0.3);
 const vec3 sunlightColor = vec3(1.0);
 const vec3 ambientColor = vec3(0.1);
 
+float getBias(vec3 worldLightVector, vec3 normal){
+    return max(0.001, 0.02 * (1.0 - dot(worldLightVector, normal)));
+}
+
 vec4 getNoise(vec2 uv){
     ivec2 screenPos = ivec2(uv * vec2(viewWidth, viewHeight));
     ivec2 noisePos = screenPos % 64;
@@ -77,8 +81,11 @@ vec3 getSoftShadow(vec4 shadowClipPos){
         for (float y = -range; y <= range; y+= increment){
             vec2 offset = rotation * vec2(x, y) / shadowMapResolution;
             vec4 offsetShadowClipPos = shadowClipPos + vec4(offset, 0.0, 0.0);
+            vec3 normal = texture(colortex2, texCoord).rgb * 2.0 - 1.0;
+            vec3 worldLightVector = mat3(gbufferModelViewInverse) * normalize(shadowLightPosition);
+            float bias = getBias(worldLightVector, normal);
+            offsetShadowClipPos.z -= bias;
             offsetShadowClipPos.xyz = distortShadowClipPos(offsetShadowClipPos.xyz);
-            offsetShadowClipPos.z -= 0.001;
             vec3 shadowNDCPos = offsetShadowClipPos.xyz / offsetShadowClipPos.w;
             vec3 shadowScreenPos = shadowNDCPos * 0.5 + 0.5;
             shadowAccum += getShadow(shadowScreenPos);
