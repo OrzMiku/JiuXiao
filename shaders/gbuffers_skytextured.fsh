@@ -1,5 +1,3 @@
-#version 450 core
+#version 130
 
-void main(){
-    discard;
-}
+#include "/programs/gbuffers/skytextured.frag"

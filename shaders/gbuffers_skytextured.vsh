@@ -1,5 +1,3 @@
-#version 450 core
+#version 130
 
-void main(){
-    gl_Position = vec4(-1.0);
-}
+#include "/programs/gbuffers/skytextured.vert"
