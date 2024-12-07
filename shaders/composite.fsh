@@ -1,3 +1,3 @@
 #version 130
 
-#include "/programs/post/taa.frag"
+#include "/programs/lighting.frag"

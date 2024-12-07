@@ -1,9 +1,7 @@
 
-
 // ----- Output -----
 
 out vec2 texCoord;
-
 out vec4 glColor;
 
 // ----- Main -----

@@ -1,22 +1,17 @@
 
 // ----- Layout -----
 
-/* DRAWBUFFERS:0 */
+/* DRAWBUFFERS:023 */
 layout (location = 0) out vec4 color;
+layout (location = 1) out vec4 lightmapData;
+layout (location = 2) out vec4 encodedNormal;
 
 // ----- Uniform -----
-
-uniform float fogStart;
-uniform float fogEnd;
-
-uniform vec3 fogColor;
 
 uniform sampler2D colortex0;
 uniform sampler2D lightmap;
 
 // ----- Input -----
-
-in float dist;
 
 in vec2 texCoord;
 in vec2 lightmapCoord;
@@ -28,12 +23,8 @@ in vec4 glColor;
 void main(){
     color = texture(colortex0, texCoord) * glColor;
 
-    // Apply Vanilla lightmap
-    color *= texture(lightmap, lightmapCoord);
-
-    // Fog
-    float fogIntensity = clamp((dist - fogStart) / (fogEnd - fogStart), 0.0, 1.0);
-    color.rgb = mix(color.rgb, fogColor, fogIntensity);
+    lightmapData = vec4(lightmapCoord, 0.0, 1.0);
+    encodedNormal = vec4(normal * 0.5 + 0.5, 1.0);
 
     if(color.a < 0.1) discard;
 }

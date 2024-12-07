@@ -2,7 +2,6 @@
 // ----- Output -----
 
 out vec2 texCoord;
-out vec4 glColor;
 
 // ----- Main -----
 
@@ -14,6 +13,4 @@ void main(){
     gl_Position = clipPos;
 
     texCoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
-
-    glColor = gl_Color;
 }

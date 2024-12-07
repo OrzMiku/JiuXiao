@@ -1,3 +1,3 @@
 #version 130
 
-#include "/programs/post/taa.vert"
+#include "/programs/lighting.vert"

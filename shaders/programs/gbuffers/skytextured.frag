@@ -11,7 +11,6 @@ uniform sampler2D colortex0;
 // ----- Input -----
 
 in vec2 texCoord;
-
 in vec4 glColor;
 
 // ----- Main -----

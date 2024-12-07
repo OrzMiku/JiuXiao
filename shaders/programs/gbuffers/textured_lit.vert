@@ -30,10 +30,9 @@ void main(){
 
     gl_Position = clipPos;
 
-    dist = length(viewPos);
-
     texCoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
     lightmapCoord = (gl_TextureMatrix[1] * gl_MultiTexCoord1).xy;
+    lightmapCoord = (lightmapCoord * 33.05 / 32.0) - (1.05 / 32.0);
 
     normal = normalize(gl_NormalMatrix * gl_Normal);
     normal = mat3(gbufferModelViewInverse) * normal;
