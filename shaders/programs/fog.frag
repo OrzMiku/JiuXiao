@@ -37,9 +37,16 @@ float calcFogFactor(vec3 viewPos){
     return exp(-density * (1.0 - dist));
 }
 
-vec3 calcSkyColor(vec3 viewPos){
+vec3 calcSkyColor(vec3 viewPos, vec3 fog){
     float up = dot(normalize(viewPos), upPosition) / 100;
-    return mix(fogcolor * normalize(sunIntensity), skyColor, clamp(up, 0.0, 1.0));
+    return mix(fog, skyColor, clamp(up, 0.0, 1.0));
+}
+
+void applyLightingIntensity(inout vec3 color, float intensity){
+    color = RGB2HSV(color);
+    color.z *= intensity;
+    color.z = clamp(color.z, 0.0, 1.0);
+    color = HSV2RGB(color);
 }
 
 // ----- Main -----
@@ -53,9 +60,12 @@ void main(){
     vec3 viewPos = projectAndDivide(gbufferProjectionInverse, NDCPos);
 
     float fogFactor = calcFogFactor(viewPos);
-    color.rgb = mix(color.rgb, fogcolor * normalize(sunIntensity), clamp(fogFactor, 0.0, 1.0));
 
-    if(depth == 1.0) color.rgb = calcSkyColor(viewPos);
+    vec3 fog = fogcolor;
+    applyLightingIntensity(fog, sunIntensity);
+    color.rgb = mix(color.rgb, fog, clamp(fogFactor, 0.0, 1.0));
+
+    if(depth == 1.0) color.rgb = calcSkyColor(viewPos, fog);
 
     if(color.a < 0.1) discard;
 }
