@@ -1,20 +1,12 @@
-// ----- Uniform -----
-
-uniform int frameCounter;
-
-uniform float viewHeight;
-uniform float viewWidth;
-
-uniform mat4 gbufferModelViewInverse;
-
-// ----- Include ------
-
-#include "/lib/jitter.glsl"
 
 // ----- Output -----
 
 out vec2 texCoord;
 out vec4 glColor;
+
+// ----- Include ------
+
+#include "/lib/distort.glsl"
 
 // ----- Main -----
 
@@ -24,7 +16,7 @@ void main(){
     vec4 clipPos = gl_ProjectionMatrix * viewPos;
 
     gl_Position = clipPos;
-    gl_Position.xy = TAAJitter(gl_Position.xy, gl_Position.w);
+    gl_Position.xyz = distortShadowClipPos(gl_Position.xyz);
 
     texCoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
 

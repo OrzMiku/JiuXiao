@@ -28,6 +28,7 @@ uniform sampler2D depthtex0;
 
 uniform float viewWidth;
 uniform float viewHeight;
+uniform vec2 screenSize;
 
 uniform vec3 cameraPosition;
 uniform vec3 previousCameraPosition;
@@ -90,7 +91,7 @@ vec3 TAA(vec3 color){
 	tempColor = colorClamp(color, tempColor, viewInv);
 
 	// Calculate velocity and blend factor
-	vec2 velocity = (texCoord - prevCoord) * vec2(viewWidth, viewHeight);
+	vec2 velocity = (texCoord - prevCoord) * screenSize;
 	float blendFactor = exp(-length(velocity)) * 0.6 + 0.3;
 
 	// Apply blend factor

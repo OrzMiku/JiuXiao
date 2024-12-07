@@ -1,3 +1,3 @@
-#version 130
+#version 330 compatibility
 
 #include "/programs/post/final.vert"

@@ -1,4 +1,6 @@
 
+#include "/lib/settings.glsl"
+
 // ----- Layout -----
 
 /* DRAWBUFFERS:023 */

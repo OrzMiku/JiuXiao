@@ -1,7 +1,5 @@
 
-// ----- Define -----
-
-#define FOG_DENSITY 5.0
+#include "/lib/settings.glsl"
 
 // ----- Layout -----
 

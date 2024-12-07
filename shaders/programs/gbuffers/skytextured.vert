@@ -1,3 +1,15 @@
+// ----- Uniform -----
+
+uniform int frameCounter;
+
+uniform float viewHeight;
+uniform float viewWidth;
+
+uniform mat4 gbufferModelViewInverse;
+
+// ----- Include ------
+
+#include "/lib/jitter.glsl"
 
 // ----- Output -----
 
@@ -12,6 +24,7 @@ void main(){
     vec4 clipPos = gl_ProjectionMatrix * viewPos;
 
     gl_Position = clipPos;
+    gl_Position.xy = TAAJitter(gl_Position.xy, gl_Position.w);
 
     texCoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
 
