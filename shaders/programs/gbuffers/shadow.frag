@@ -6,6 +6,8 @@ layout (location = 0) out vec4 color;
 
 // ----- Uniform -----
 
+uniform float alphaTestRef;
+
 uniform sampler2D colortex0;
 
 // ----- Input -----
@@ -18,5 +20,5 @@ in vec4 glColor;
 void main(){
     color = texture(colortex0, texCoord) * glColor;
 
-    if(color.a < 0.1) discard;
+    if(color.a < alphaTestRef) discard;
 }

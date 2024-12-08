@@ -10,6 +10,8 @@ layout (location = 2) out vec4 encodedNormal;
 
 // ----- Uniform -----
 
+uniform float alphaTestRef;
+
 uniform sampler2D colortex0;
 uniform sampler2D lightmap;
 
@@ -28,5 +30,5 @@ void main(){
     lightmapData = vec4(lightmapCoord, 0.0, 1.0);
     encodedNormal = vec4(normal * 0.5 + 0.5, 1.0);
 
-    if(color.a < 0.1) discard;
+    if(color.a < alphaTestRef) discard;
 }

@@ -11,6 +11,7 @@ layout (location = 0) out vec4 color;
 uniform sampler2D colortex0;
 uniform sampler2D depthtex0;
 
+uniform float alphaTestRef;
 uniform float sunIntensity;
 uniform float far;
 
@@ -67,5 +68,5 @@ void main(){
 
     if(depth == 1.0) color.rgb = calcSkyColor(viewPos, fog);
 
-    if(color.a < 0.1) discard;
+    if(color.a < alphaTestRef) discard;
 }
