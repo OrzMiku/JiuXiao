@@ -1,3 +1,7 @@
+// ----- Tone Mapping -----
+
+#include "/lib/settings.glsl"
+#include "/lib/agx.glsl"
 
 // ----- Layout -----
 
@@ -17,4 +21,5 @@ in vec2 texCoord;
 void main()
 {
     color = texture(colortex0, texCoord);
+    if(AGX == 1) color.rgb = agx(color.rgb);
 }
