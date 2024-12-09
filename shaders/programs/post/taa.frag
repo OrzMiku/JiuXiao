@@ -88,7 +88,7 @@ vec3 TemporalAA(vec3 color){
 // Main
 
 void main(){
-    color = texture(gtexture, texCoord);
+    color = texture(colortex0, texCoord);
     if(TAA == ON){
         color.rgb = TemporalAA(color.rgb);
     };

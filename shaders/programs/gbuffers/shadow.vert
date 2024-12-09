@@ -9,6 +9,7 @@ in vec4 vaColor;
 // Outputs
 
 out vec4 glColor;
+out vec2 texCoord;
 
 // Uniforms
 
@@ -32,5 +33,6 @@ void main(){
     gl_Position = projectionMatrix * modelViewMatrix * vec4(vaPosition + chunkOffset, 1.0);
     gl_Position.xyz = distortShadowClipPos(gl_Position.xyz);
 
+    texCoord = (textureMatrix * vec4(vaUV2, 0.0, 1.0)).xy;
     glColor = vaColor;
 }
