@@ -41,7 +41,7 @@ uniform mat4 gbufferPreviousModelView;
 
 // Outputs
 
-/* DRAWBUFFERS:01 */
+/* RENDERTARGETS: 0,1 */
 layout(location = 0) out vec4 color;
 layout(location = 1) out vec4 prevColor;
 

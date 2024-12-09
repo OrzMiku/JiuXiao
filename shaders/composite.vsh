@@ -1,3 +1,3 @@
 #version 460 core
 
-#include "/programs/fog.vert"
+#include "/programs/lighting.vert"

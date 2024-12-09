@@ -11,9 +11,9 @@ in vec4 vaColor;
 
 // Outputs
 
-out float lightIntensity;
 out vec2 texCoord;
 out vec2 lmCoord;
+out vec3 normal;
 out vec4 glColor;
 
 // Uniforms
@@ -36,7 +36,7 @@ uniform mat4 gbufferModelViewInverse;
 // Main
 
 void main(){
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(vaPosition, 1.0);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(vaPosition + chunkOffset, 1.0);
     if(TAA == ON){
         gl_Position.xy = taaJitter(gl_Position.xy, gl_Position.w);
     }
@@ -47,9 +47,6 @@ void main(){
     texCoord = (textureMatrix * vec4(vaUV0, 0.0, 1.0)).xy;
     glColor = vaColor;
 
-    vec3 normal = normalMatrix * vaNormal;
-    normal = normalize(normal);
-    normal = (round(mc_Entity) == 10001) ? vec3(0.0, 1.0, 0.0) : (gbufferModelViewInverse * vec4(normal, 0.0)).xyz;
-
-    lightIntensity = 1.2 * min(normal.x * normal.x * 0.6 + normal.y * normal.y * 0.25 * (3.0 + normal.y) + normal.z * normal.z * 0.8, 1.0);
+    normal = normalize(normalMatrix * vaNormal);
+    normal = (round(mc_Entity) == 10001) ? vec3(0.0, 1.0, 0.0) : mat3(gbufferModelViewInverse) * normal;
 }
