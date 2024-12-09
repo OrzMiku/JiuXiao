@@ -1,10 +1,12 @@
 // Inputs
 
+in vec2 texCoord;
 in vec2 lmCoord;
 in vec4 glColor;
 
 // Uniforms
 
+uniform sampler2D gtexture;
 uniform sampler2D lightmap;
 
 uniform float alphaTestRef;
@@ -15,8 +17,8 @@ uniform float alphaTestRef;
 layout(location = 0) out vec4 color;
 
 void main(){
-    color = glColor * texture(lightmap, lmCoord);
-
+    color = texture(gtexture, texCoord) * glColor;
+    color *= texture(lightmap, lmCoord);
     if(color.a < alphaTestRef){
         discard;
     }
