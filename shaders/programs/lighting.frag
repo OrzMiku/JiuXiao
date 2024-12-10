@@ -66,7 +66,7 @@ vec3 calcShadow(vec3 shadowScreenPos){
 
     // Semi transparent
     vec4 shadowColor = texture(shadowcolor0, shadowScreenPos.xy);
-    return shadowColor.rgb * shadowColor.a;
+    return shadowColor.rgb * (1 - shadowColor.a);
 }
 
 vec3 calcSoftShadow(vec4 shadowClipPos){
