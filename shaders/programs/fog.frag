@@ -13,7 +13,10 @@ in vec2 texCoord;
 uniform float viewWidth;
 uniform float viewHeight;
 uniform float far;
+uniform float sunIntensity;
 
+
+uniform vec3 fogColor;
 uniform vec3 customFogColor;
 
 // Uniforms
@@ -44,5 +47,5 @@ void main()
     float dist = length(viewPos) / far;
     float fogFactor = exp(-FOG_DENSITY * (1.0 - dist));
 
-    color.rgb = mix(color.rgb, customFogColor, clamp(fogFactor, 0.0, 1.0));
+    color.rgb = mix(color.rgb, fogColor * customFogColor * sunIntensity, clamp(fogFactor, 0.0, 1.0));
 }

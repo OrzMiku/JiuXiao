@@ -2,7 +2,6 @@
 
 // Attributes
 
-in float mc_Entity;
 in vec2 vaUV0;
 in ivec2 vaUV2;
 in vec3 vaPosition;
@@ -47,5 +46,5 @@ void main(){
     glColor = vaColor;
 
     normal = normalize(normalMatrix * vaNormal);
-    normal = (round(mc_Entity) == 10001) ? vec3(0.0, 1.0, 0.0) : mat3(gbufferModelViewInverse) * normal;
+    normal = mat3(gbufferModelViewInverse) * normal;
 }
