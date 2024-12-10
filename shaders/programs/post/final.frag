@@ -1,4 +1,6 @@
+#include "/libs/settings.glsl"
 #include "/libs/functions.glsl"
+#include "/libs/tonemap/agx.glsl"
 
 // Outputs
 
@@ -18,4 +20,7 @@ uniform sampler2D colortex0;
 void main()
 {
     color = texture(colortex0, texCoord);
+    if(AGX == ON) {
+        color.rgb = agx(color.rgb);
+    }
 }

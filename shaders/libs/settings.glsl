@@ -9,4 +9,6 @@
 
 #define TAA ON // [ON OFF]
 
+#define AGX ON // [ON OFF]
+
 #define WHITE_WORLD OFF // [ON OFF]
