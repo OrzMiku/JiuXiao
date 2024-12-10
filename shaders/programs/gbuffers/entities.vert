@@ -23,7 +23,7 @@ uniform float viewWidth;
 uniform float viewHeight;
 
 uniform mat3 normalMatrix;
-uniform mat4 textureMatrix;
+uniform mat4 textureMatrix = mat4(1.0);
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
 uniform mat4 gbufferModelViewInverse;

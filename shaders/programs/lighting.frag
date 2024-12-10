@@ -3,7 +3,6 @@
 
 // Constants
 
-const float specularStrength = 1.0;
 const float ambientStrength = 0.1;
 const vec3 blocklightColor = vec3(1.0, 0.5, 0.08);
 const vec3 skylightColor = vec3(0.10, 0.20, 0.3);
@@ -53,7 +52,7 @@ vec4 getNoise(vec2 coord){
 }
 
 float getShadowBias(vec3 normal, vec3 lightDir, float dist){
-    return max(0.005 * (1.0 - dot(normal, normalize(lightDir))), 0.0005) + 0.05 * exp(-10 * (1.0 - dist));
+    return max(0.0005 * (1.0 - dot(normal, normalize(lightDir))), 0.00025) + 0.05 * exp(-8 * (1.0 - dist));
 }
 
 vec3 calcShadow(vec3 shadowScreenPos){
@@ -137,7 +136,7 @@ vec3 calcLighting(vec3 color){
     vec3 viewDir = normalize(-feetPlayerPos);
     vec3 reflectDir = reflect(-lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 8.0);
-    vec3 specular = specularStrength * spec * sunlightColor;
+    vec3 specular = sunIntensity * spec * sunlightColor;
     vec3 sunlight = diffuse + specular;
 
     applyShadow(sunlight, shadow);

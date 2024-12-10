@@ -10,8 +10,12 @@
 #define SHADOW_QUALITY 2.0 // [2.0 4.0 8.0 16.0] 
 #define SHADOW_SOFTNESS 1.0 // [1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0] 
 
+#define SUN_ROTATION  30.0 // [0.0 30.0 60.0 90.0 120.0 150.0 180.0 210.0 240.0 270.0 300.0 330.0]
+
 #define TAA ON // [ON OFF]
 
 #define AGX ON // [ON OFF]
 
 #define WHITE_WORLD OFF // [ON OFF]
+
+const float sunPathRotation = SUN_ROTATION;
