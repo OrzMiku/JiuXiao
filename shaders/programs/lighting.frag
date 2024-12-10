@@ -3,6 +3,7 @@
 
 // Constants
 
+const float specularStrength = 1.0;
 const float ambientStrength = 0.1;
 const vec3 blocklightColor = vec3(1.0, 0.5, 0.08);
 const vec3 skylightColor = vec3(0.10, 0.20, 0.3);
@@ -124,7 +125,13 @@ vec3 calcLighting(vec3 color){
 
     vec3 skylight = lightmap.g * skylightColor;
     vec3 lightDir = mat3(gbufferModelViewInverse) * normalize(shadowLightPosition);
-    vec3 sunlight = sunlightColor * clamp(dot(normal, lightDir), 0.0, 1.0);
+    vec3 diffuse = sunlightColor * clamp(dot(normal, lightDir), 0.0, 1.0);
+    
+    vec3 viewDir = normalize(-feetPlayerPos);
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 8.0);
+    vec3 specular = specularStrength * spec * sunlightColor;
+    vec3 sunlight = diffuse + specular;
 
     applyShadow(sunlight, shadow);
 
