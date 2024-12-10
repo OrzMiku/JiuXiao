@@ -1,11 +1,5 @@
 #include "/libs/settings.glsl"
 
-// Attributes
-
-in ivec2 vaUV2;
-in vec3 vaPosition;
-in vec4 vaColor;
-
 // Outputs
 
 out vec4 glColor;
@@ -17,11 +11,6 @@ uniform int frameCounter;
 uniform float viewWidth;
 uniform float viewHeight;
 
-uniform vec3 chunkOffset;
-uniform mat4 textureMatrix;
-uniform mat4 modelViewMatrix;
-uniform mat4 projectionMatrix;
-
 // Functions
 
 #include "/libs/jitter.glsl"
@@ -30,9 +19,9 @@ uniform mat4 projectionMatrix;
 // Main
 
 void main(){
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(vaPosition + chunkOffset, 1.0);
+    gl_Position = ftransform();
     gl_Position.xyz = distortShadowClipPos(gl_Position.xyz);
 
-    texCoord = (textureMatrix * vec4(vaUV2, 0.0, 1.0)).xy;
-    glColor = vaColor;
+    texCoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
+    glColor = gl_Color;
 }

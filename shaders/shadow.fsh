@@ -1,3 +1,3 @@
-#version 460 core
+#version 460 compatibility
 
 #include "/programs/gbuffers/shadow.frag"
