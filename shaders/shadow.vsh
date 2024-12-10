@@ -1,3 +1,3 @@
-#version 330 compatibility
+#version 460 compatibility
 
 #include "/programs/gbuffers/shadow.vert"

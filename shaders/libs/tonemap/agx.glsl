@@ -77,7 +77,7 @@ vec3 agx(vec3 color) {
           - 0.00232;
 
   // 2. agxLook()
-    color = agxAscCdl(color, vec3(1.20), vec3(0.0), vec3(1.40), 1.4);
+    color = agxAscCdl(color, vec3(1.20), vec3(0.0), vec3(1.35), 1.4);
 
   // 3. agxEotf()
   // Inverse input transform (outset)

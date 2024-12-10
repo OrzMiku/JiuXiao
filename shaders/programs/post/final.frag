@@ -1,25 +1,26 @@
-// ----- Tone Mapping -----
+#include "/libs/settings.glsl"
+#include "/libs/functions.glsl"
+#include "/libs/tonemap/agx.glsl"
 
-#include "/lib/settings.glsl"
-#include "/lib/agx.glsl"
+// Outputs
 
-// ----- Layout -----
-
-/* DRAWBUFFERS:0 */
+/* RENDERTARGETS: 0 */
 layout(location = 0) out vec4 color;
 
-// ----- Uniform -----
-
-uniform sampler2D colortex0;
-
-// ----- Input -----
+// Inputs
 
 in vec2 texCoord;
 
-// ----- Main -----
+// Uniforms
+
+uniform sampler2D colortex0;
+
+// Main
 
 void main()
 {
     color = texture(colortex0, texCoord);
-    if(AGX == 1) color.rgb = agx(color.rgb);
+    if(AGX == ON) {
+        color.rgb = agx(color.rgb);
+    }
 }

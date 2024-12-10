@@ -1,24 +1,27 @@
+#include "/libs/settings.glsl"
 
-// ----- Output -----
+// Outputs
 
-out vec2 texCoord;
 out vec4 glColor;
+out vec2 texCoord;
 
-// ----- Include ------
+// Uniforms
 
-#include "/lib/distort.glsl"
+uniform int frameCounter;
+uniform float viewWidth;
+uniform float viewHeight;
 
-// ----- Main -----
+// Functions
+
+#include "/libs/jitter.glsl"
+#include "/libs/distort.glsl"
+
+// Main
 
 void main(){
-    vec3 modelPos = gl_Vertex.xyz;
-    vec4 viewPos = gl_ModelViewMatrix * vec4(modelPos, 1.0);
-    vec4 clipPos = gl_ProjectionMatrix * viewPos;
-
-    gl_Position = clipPos;
+    gl_Position = ftransform();
     gl_Position.xyz = distortShadowClipPos(gl_Position.xyz);
 
     texCoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
-
     glColor = gl_Color;
 }

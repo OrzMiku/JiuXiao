@@ -1,3 +1,3 @@
-#version 330 compatibility
+#version 460 core
 
 #include "/programs/post/taa.vert"

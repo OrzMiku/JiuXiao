@@ -1,11 +1,13 @@
+#include "/libs/settings.glsl"
+
 // Attributes
 
-in vec2 vaUV0;
 in vec3 vaPosition;
+in vec4 vaColor;
 
 // Outputs
 
-out vec2 texCoord;
+out vec4 glColor;
 
 // Uniforms
 
@@ -25,5 +27,9 @@ uniform mat4 projectionMatrix;
 
 void main(){
     gl_Position = projectionMatrix * modelViewMatrix * vec4(vaPosition, 1.0);
-    texCoord = vaUV0;
+    if(TAA == ON){
+        gl_Position.xy = taaJitter(gl_Position.xy, gl_Position.w);
+    }
+
+    glColor = vaColor;
 }

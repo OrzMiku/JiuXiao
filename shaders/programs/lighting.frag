@@ -1,19 +1,18 @@
 
-#include "/lib/settings.glsl"
+#include "/libs/settings.glsl"
 
-// ----- Constants -----
+// Constants
 
+const float ambientStrength = 0.1;
 const vec3 blocklightColor = vec3(1.0, 0.5, 0.08);
-const vec3 ambientColor = vec3(0.1);
 const vec3 skylightColor = vec3(0.10, 0.20, 0.3);
 const vec3 sunlightColor = vec3(1.0, 0.9, 0.8);
 
-// ----- Layout -----
+// Inputs
 
-/* DRAWBUFFERS:0 */
-layout(location = 0) out vec4 color;
+in vec2 texCoord;
 
-// ----- Uniform -----
+// Uniforms
 
 uniform sampler2D colortex0;
 uniform sampler2D colortex2;
@@ -27,7 +26,7 @@ uniform sampler2D noisetex;
 uniform float sunIntensity;
 uniform float viewHeight;
 uniform float viewWidth;
-uniform float screenSize;
+uniform float far;
 
 uniform vec3 shadowLightPosition;
 
@@ -36,21 +35,24 @@ uniform mat4 gbufferModelViewInverse;
 uniform mat4 shadowModelView;
 uniform mat4 shadowProjection;
 
-// ----- Input -----
+// Outputs
 
-in vec2 texCoord;
+/* DRAWBUFFERS:0 */
+layout(location = 0) out vec4 color;
 
-// ----- Include -----
+// Functions
 
-#include "/lib/distort.glsl"
-#include "/lib/function.glsl"
-
-// ----- Functions -----
+#include "/libs/distort.glsl"
+#include "/libs/functions.glsl"
 
 vec4 getNoise(vec2 coord){
-  ivec2 screenCoord = ivec2(coord * screenSize);
+  ivec2 screenCoord = ivec2(coord * vec2(viewWidth, viewHeight));
   ivec2 noiseCoord = screenCoord % 64;
   return texelFetch(noisetex, noiseCoord, 0);
+}
+
+float getShadowBias(vec3 normal, vec3 lightDir, float dist){
+    return max(0.0005 * (1.0 - dot(normal, normalize(lightDir))), 0.00025) + 0.05 * exp(-8 * (1.0 - dist));
 }
 
 vec3 calcShadow(vec3 shadowScreenPos){
@@ -68,10 +70,10 @@ vec3 calcShadow(vec3 shadowScreenPos){
 
     // Semi transparent
     vec4 shadowColor = texture(shadowcolor0, shadowScreenPos.xy);
-    return shadowColor.rgb * (1.0 - shadowColor.a);
+    return shadowColor.rgb * (1 - shadowColor.a);
 }
 
-vec3 calcSoftShadow(vec4 shadowClipPos){
+vec3 calcSoftShadow(vec4 shadowClipPos, float bias){
     const float range = SHADOW_SOFTNESS / 2.0;
     const float increment = range / SHADOW_QUALITY;
 
@@ -89,7 +91,7 @@ vec3 calcSoftShadow(vec4 shadowClipPos){
             vec2 offset = rotation * vec2(x, y) / shadowMapResolution;
             vec4 offsetShadowClipPos = shadowClipPos + vec4(offset, 0.0, 0.0);
             offsetShadowClipPos.xyz = distortShadowClipPos(offsetShadowClipPos.xyz);
-            offsetShadowClipPos.z -= 0.001;
+            offsetShadowClipPos.z -= bias;
 
             vec3 shadowNDCPos = offsetShadowClipPos.xyz / offsetShadowClipPos.w;
             vec3 shadowScreenPos = shadowNDCPos * 0.5 + 0.5;
@@ -102,34 +104,40 @@ vec3 calcSoftShadow(vec4 shadowClipPos){
 }
 
 void applyLightingIntensity(inout vec3 color, float intensity){
-    color = RGB2HSL(color);
-    color.z *= intensity;
-    color.z = clamp(color.z, 0.0, 1.0);
-    color = HSL2RGB(color);
+    color *= intensity;
 }
 
 void applyShadow(inout vec3 color, vec3 shadow){
     color *= shadow;
 }
 
-vec3 calcLighting(){
+vec3 calcLighting(vec3 color){
     float depth = texture(depthtex0, texCoord).r;
+    if(depth == 1.0) return vec3(1.0);
     vec3 NDCPos = vec3(texCoord.xy, depth) * 2.0 - 1.0;
     vec3 viewPos = projectAndDivide(gbufferProjectionInverse, NDCPos);
     vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
     vec3 shadowViewPos = (shadowModelView * vec4(feetPlayerPos, 1.0)).xyz;
     vec4 shadowClipPos = shadowProjection * vec4(shadowViewPos, 1.0);
 
-    vec3 shadow = calcSoftShadow(shadowClipPos);
+    vec3 normal = texture(colortex2, texCoord).xyz * 2.0 - 1.0;
+    vec3 lightDir = mat3(gbufferModelViewInverse) * normalize(shadowLightPosition);
+    float bias = getShadowBias(normal, lightDir, length(feetPlayerPos) / far);
 
-    vec3 normal = texture(colortex3, texCoord).xyz * 2.0 - 1.0;
-    vec2 lightmap = texture(colortex2, texCoord).rg;
+    vec3 shadow = calcSoftShadow(shadowClipPos, bias);
+
+    vec2 lightmap = texture(colortex3, texCoord).rg;
     vec3 blocklight = lightmap.r * blocklightColor;
-    vec3 ambient = ambientColor;
+    vec3 ambient = ambientStrength * color;
 
     vec3 skylight = lightmap.g * skylightColor;
-    vec3 lightDir = mat3(gbufferModelViewInverse) * normalize(shadowLightPosition);
-    vec3 sunlight = sunlightColor * clamp(dot(normal, lightDir), 0.0, 1.0);
+    vec3 diffuse = sunlightColor * clamp(dot(normal, lightDir), 0.0, 1.0);
+    
+    vec3 viewDir = normalize(-feetPlayerPos);
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 8.0);
+    vec3 specular = sunIntensity * spec * sunlightColor;
+    vec3 sunlight = diffuse + specular;
 
     applyShadow(sunlight, shadow);
 
@@ -141,7 +149,7 @@ vec3 calcLighting(){
 
 void applyLighting(){
     color.rgb = pow(color.rgb, vec3(2.2));
-    color.rgb *= calcLighting();
+    color.rgb *= calcLighting(color.rgb);
     color.rgb = pow(color.rgb, vec3(1.0 / 2.2));
 }
 
@@ -150,6 +158,6 @@ void applyLighting(){
 void main()
 {
     color = texture(colortex0, texCoord);
-    // Lighting
+    if(WHITE_WORLD == ON){ color.rgb = vec3(1.0); }
     applyLighting();
 }

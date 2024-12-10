@@ -1,16 +1,29 @@
+// Attributes
 
-// ----- Output -----
+in vec2 vaUV0;
+in vec3 vaPosition;
+
+// Outputs
 
 out vec2 texCoord;
 
-// ----- Main -----
+// Uniforms
+
+uniform int frameCounter;
+uniform float viewWidth;
+uniform float viewHeight;
+
+uniform mat4 textureMatrix = mat4(1.0);
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+
+// TAA
+
+#include "/libs/jitter.glsl"
+
+// Main
 
 void main(){
-    vec3 modelPos = gl_Vertex.xyz;
-    vec4 viewPos = gl_ModelViewMatrix * vec4(modelPos, 1.0);
-    vec4 clipPos = gl_ProjectionMatrix * viewPos;
-
-    gl_Position = clipPos;
-
-    texCoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(vaPosition, 1.0);
+    texCoord = vaUV0;
 }

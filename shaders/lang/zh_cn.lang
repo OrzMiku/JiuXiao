@@ -1,6 +1,0 @@
-screen.FOG = 雾
-option.FOG_DENSITY = 雾密度
-
-screen.SHADOW = 阴影
-option.SHADOW_QUALITY = 阴影质量
-option.SHADOW_SOFTNESS = 阴影柔和度

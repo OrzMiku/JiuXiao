@@ -3,13 +3,6 @@ vec3 projectAndDivide(mat4 projectionMatrix, vec3 position){
   return homPos.xyz / homPos.w;
 }
 
-vec3 screenToView(mat4 projectionInverse, vec3 screenPos){
-  vec3 NDCPos = screenPos * 2.0 - 1.0;
-  vec3 viewPos = projectAndDivide(projectionInverse, NDCPos);
-  return viewPos;
-}
-
-
 float HUE2RGB(float p, float q, float t){
   if(t < 0.0){
     t += 360.0;

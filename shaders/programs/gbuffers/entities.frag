@@ -11,6 +11,7 @@ uniform sampler2D gtexture;
 uniform sampler2D lightmap;
 
 uniform float alphaTestRef;
+uniform vec4 entityColor;
 
 // Outputs
 
@@ -20,7 +21,9 @@ layout(location = 1) out vec4 encodedNormal;
 layout(location = 2) out vec4 lightmapData;
 
 void main(){
-    color = texture(gtexture, texCoord) * glColor;
+    color = texture(gtexture, texCoord) * glColor;    
+    color.rgb = mix(color.rgb, entityColor.rgb, entityColor.a);
+
     color *= texture(lightmap, lmCoord);
 
     encodedNormal = vec4(normal * 0.5 + 0.5, 1.0);
