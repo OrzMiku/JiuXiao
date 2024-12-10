@@ -135,7 +135,7 @@ vec3 calcLighting(vec3 color){
     
     vec3 viewDir = normalize(-feetPlayerPos);
     vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 8.0);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 4.0);
     vec3 specular = sunIntensity * spec * sunlightColor;
     vec3 sunlight = diffuse + specular;
 
