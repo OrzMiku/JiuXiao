@@ -144,7 +144,10 @@ vec3 calcLighting(vec3 color){
     applyLightingIntensity(sunlight, sunIntensity);
     applyLightingIntensity(skylight, sunIntensity);
 
-    return blocklight + skylight + ambient + sunlight;
+    normal = normal * 0.5 + 0.5;
+    float lightAdjFactor = min(normal.x * normal.x * 0.6 + normal.y * normal.y * 0.25 * (3.0 + normal.y) + normal.z * normal.z * 0.8, 1.0);
+
+    return (blocklight + skylight + ambient + sunlight) * lightAdjFactor;
 }
 
 void applyLighting(){
