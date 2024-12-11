@@ -52,7 +52,7 @@ vec4 getNoise(vec2 coord){
 }
 
 float getShadowBias(vec3 normal, vec3 lightDir, float dist){
-    return max(0.0005 * (1.0 - dot(normal, normalize(lightDir))), 0.00025) + 0.05 * exp(-8 * (1.0 - dist));
+    return max(0.0005 * (1.0 - dot(normal, normalize(lightDir))), 0.00005) + 0.05 * exp(-8 * (1.0 - dist));
 }
 
 vec3 calcShadow(vec3 shadowScreenPos){
