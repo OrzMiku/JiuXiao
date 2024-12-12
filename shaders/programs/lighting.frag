@@ -24,11 +24,10 @@ uniform sampler2D shadowcolor0;
 uniform sampler2D noisetex;
 
 uniform float sunIntensity;
-uniform float viewHeight;
-uniform float viewWidth;
 uniform float far;
 
 uniform ivec2 eyeBrightnessSmooth;
+uniform vec2 screenSize;
 
 uniform vec3 shadowLightPosition;
 
@@ -48,7 +47,7 @@ layout(location = 0) out vec4 color;
 #include "/libs/functions.glsl"
 
 vec4 getNoise(vec2 coord){
-  ivec2 screenCoord = ivec2(coord * vec2(viewWidth, viewHeight));
+  ivec2 screenCoord = ivec2(coord * screenSize);
   ivec2 noiseCoord = screenCoord % 64;
   return texelFetch(noisetex, noiseCoord, 0);
 }

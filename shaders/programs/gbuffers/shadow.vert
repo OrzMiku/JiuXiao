@@ -5,15 +5,8 @@
 out vec4 glColor;
 out vec2 texCoord;
 
-// Uniforms
-
-uniform int frameCounter;
-uniform float viewWidth;
-uniform float viewHeight;
-
 // Functions
 
-#include "/libs/jitter.glsl"
 #include "/libs/distort.glsl"
 
 // Main

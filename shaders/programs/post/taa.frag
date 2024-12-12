@@ -28,11 +28,12 @@ uniform sampler2D colortex1;
 uniform sampler2D depthtex0;
 
 uniform float alphaTestRef;
-uniform float viewWidth;
-uniform float viewHeight;
 
-uniform vec3 cameraPosition;
-uniform vec3 previousCameraPosition;
+uniform vec2 taaOffset;
+uniform vec2 screenSize;
+uniform vec2 texelSize;
+
+uniform vec3 cameraMovement;
 
 uniform mat4 gbufferProjectionInverse;
 uniform mat4 gbufferPreviousProjection;
@@ -51,7 +52,7 @@ vec2 Reprojection(vec2 coord, float depth){
     vec3 ndcPos = vec3(coord, depth) * 2.0 - 1.0;
     vec3 viewPos = projectAndDivide(gbufferProjectionInverse, ndcPos);
     vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
-    vec3 cameraOffset = cameraPosition - previousCameraPosition;
+    vec3 cameraOffset = cameraMovement;
     vec4 prevPos = gbufferPreviousProjection * gbufferPreviousModelView * vec4(feetPlayerPos + cameraOffset, 1.0);
     prevPos /= prevPos.w;
     return prevPos.xy * 0.5 + 0.5;
@@ -75,10 +76,9 @@ vec3 TemporalAA(vec3 color){
     vec3 prevColor = texture(colortex1, prevCoord).rgb;
     if(prevColor == vec3(0.0)) return color;
 
-    vec2 viewInv = vec2(1.0 / viewWidth, 1.0 / viewHeight);
-	prevColor = colorClamp(color, prevColor, viewInv);
+	prevColor = colorClamp(color, prevColor, texelSize);
 
-    vec2 velocity = (texCoord - prevCoord) * vec2(viewWidth, viewHeight);
+    vec2 velocity = (texCoord - prevCoord) * screenSize;
     float blendFactor = exp(-length(velocity)) * 0.6 + 0.3;
 
     color = mix(color, prevColor, blendFactor);

@@ -1,3 +1,3 @@
 #version 460 core
 
-#include "/programs/post/final.vert"
+#include "/programs/common/common.vert"

@@ -15,18 +15,17 @@ in vec2 texCoord;
 
 uniform sampler2D colortex0;
 
-uniform float viewHeight;
-uniform float viewWidth;
+uniform vec2 screenSize;
 
 // Main
 
 void main()
 {
     color = texture(colortex0, texCoord);
+    if(BLUR == ON) {
+        color.rgb = gaussianBlur(colortex0, texCoord, screenSize, BLUR_RADIUS, BLUR_SIGMA);
+    }
     if(AGX == ON) {
         color.rgb = agx(color.rgb);
-    }
-    if(BLUR == ON) {
-        color.rgb = gaussianBlur(colortex0, texCoord, vec2(viewWidth, viewHeight), BLUR_RADIUS, BLUR_SIGMA);
     }
 }

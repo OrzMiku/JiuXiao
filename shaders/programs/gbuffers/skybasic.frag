@@ -8,9 +8,9 @@ in vec4 glColor;
 
 uniform int renderStage;
 uniform float sunIntensity;
-uniform float viewWidth;
-uniform float viewHeight;
 uniform float alphaTestRef;
+
+uniform vec2 texelSize;
 
 uniform vec3 upPosition;
 uniform vec3 skyColor;
@@ -44,7 +44,7 @@ void main(){
     if(renderStage == MC_RENDER_STAGE_STARS){
         color = glColor;
     }else{
-        vec3 pos = screenToView(vec3(gl_FragCoord.xy / vec2(viewWidth, viewHeight), 1.0));
+        vec3 pos = screenToView(vec3(gl_FragCoord.xy * texelSize, 1.0));
 		color = vec4(calcSkyColor(normalize(pos)), 1.0);
     }
 

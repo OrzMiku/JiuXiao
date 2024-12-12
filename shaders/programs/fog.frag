@@ -10,11 +10,8 @@ layout(location = 0) out vec4 color;
 
 in vec2 texCoord;
 
-uniform float viewWidth;
-uniform float viewHeight;
 uniform float far;
 uniform float sunIntensity;
-
 
 uniform vec3 fogColor;
 uniform vec3 customFogColor;

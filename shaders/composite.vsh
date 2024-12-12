@@ -1,3 +1,3 @@
 #version 460 core
 
-#include "/programs/lighting.vert"
+#include "/programs/common/common.vert"
