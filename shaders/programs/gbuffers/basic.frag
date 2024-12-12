@@ -5,9 +5,7 @@ in vec4 glColor;
 
 // Uniforms
 
-uniform sampler2D lightmap;
-
-uniform float alphaTestRef;
+#include "/libs/uniforms.glsl"
 
 // Outputs
 

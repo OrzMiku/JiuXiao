@@ -17,13 +17,7 @@ out vec4 glColor;
 
 // Uniforms
 
-uniform vec2 taaOffset;
-
-uniform mat3 normalMatrix;
-uniform mat4 textureMatrix = mat4(1.0);
-uniform mat4 modelViewMatrix;
-uniform mat4 projectionMatrix;
-uniform mat4 gbufferModelViewInverse;
+#include "/libs/uniforms.glsl"
 
 // Main
 

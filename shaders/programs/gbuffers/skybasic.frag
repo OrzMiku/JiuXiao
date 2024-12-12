@@ -6,18 +6,7 @@ in vec4 glColor;
 
 // Uniforms
 
-uniform int renderStage;
-uniform float sunIntensity;
-uniform float alphaTestRef;
-
-uniform vec2 texelSize;
-
-uniform vec3 upPosition;
-uniform vec3 skyColor;
-uniform vec3 fogColor;
-
-uniform mat4 gbufferModelView;
-uniform mat4 gbufferProjectionInverse;
+#include "/libs/uniforms.glsl"
 
 // Outputs
 

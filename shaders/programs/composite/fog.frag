@@ -10,18 +10,9 @@ layout(location = 0) out vec4 color;
 
 in vec2 texCoord;
 
-uniform float far;
-uniform float sunIntensity;
-
-uniform vec3 fogColor;
-uniform vec3 customFogColor;
-
 // Uniforms
 
-uniform sampler2D colortex0;
-uniform sampler2D depthtex0;
-
-uniform mat4 gbufferProjectionInverse;
+#include "/libs/uniforms.glsl"
 
 // Functions
 

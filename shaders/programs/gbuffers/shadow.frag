@@ -6,9 +6,7 @@ in vec4 glColor;
 
 // Uniforms
 
-uniform float alphaTestRef;
-
-uniform sampler2D gtexture;
+#include "/libs/uniforms.glsl"
 
 // Outputs
 

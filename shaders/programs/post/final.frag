@@ -13,9 +13,7 @@ in vec2 texCoord;
 
 // Uniforms
 
-uniform sampler2D colortex0;
-
-uniform vec2 screenSize;
+#include "/libs/uniforms.glsl"
 
 // Main
 

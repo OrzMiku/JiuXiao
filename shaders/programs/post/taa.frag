@@ -22,23 +22,7 @@ in vec2 texCoord;
 
 // Uniforms
 
-uniform sampler2D gtexture;
-uniform sampler2D colortex0;
-uniform sampler2D colortex1;
-uniform sampler2D depthtex0;
-
-uniform float alphaTestRef;
-
-uniform vec2 taaOffset;
-uniform vec2 screenSize;
-uniform vec2 texelSize;
-
-uniform vec3 cameraMovement;
-
-uniform mat4 gbufferProjectionInverse;
-uniform mat4 gbufferPreviousProjection;
-uniform mat4 gbufferModelViewInverse;
-uniform mat4 gbufferPreviousModelView;
+#include "/libs/uniforms.glsl"
 
 // Outputs
 

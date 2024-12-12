@@ -8,9 +8,7 @@ out vec2 texCoord;
 
 // Uniforms
 
-uniform mat4 textureMatrix = mat4(1.0);
-uniform mat4 modelViewMatrix;
-uniform mat4 projectionMatrix;
+#include "/libs/uniforms.glsl"
 
 // Main
 
