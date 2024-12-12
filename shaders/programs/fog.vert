@@ -9,17 +9,8 @@ out vec2 texCoord;
 
 // Uniforms
 
-uniform int frameCounter;
-uniform float viewWidth;
-uniform float viewHeight;
-
-uniform mat4 textureMatrix = mat4(1.0);
 uniform mat4 modelViewMatrix;
 uniform mat4 projectionMatrix;
-
-// TAA
-
-#include "/libs/jitter.glsl"
 
 // Main
 

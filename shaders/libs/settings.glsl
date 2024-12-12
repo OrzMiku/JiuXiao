@@ -17,5 +17,8 @@
 #define AGX ON // [ON OFF]
 
 #define WHITE_WORLD OFF // [ON OFF]
+#define BLUR OFF // [ON OFF]
+#define BLUR_RADIUS 5.0 // [1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0]
+#define BLUR_SIGMA 4.0 // [1.0 2.0 3.0 4.0 5.0 6.0 7.0 8.0]
 
 const float sunPathRotation = SUN_ROTATION;
