@@ -1,7 +1,9 @@
 #include "/libs/settings.glsl"
 
-// Attributes
+// Uniforms
+#include "/libs/uniforms.glsl"
 
+// Attributes
 in float mc_Entity;
 in vec2 vaUV0;
 in ivec2 vaUV2;
@@ -10,18 +12,12 @@ in vec3 vaNormal;
 in vec4 vaColor;
 
 // Outputs
-
 out vec2 texCoord;
 out vec2 lmCoord;
 out vec3 normal;
 out vec4 glColor;
 
-// Uniforms
-
-#include "/libs/uniforms.glsl"
-
 // Main
-
 void main(){
     gl_Position = projectionMatrix * modelViewMatrix * vec4(vaPosition + chunkOffset, 1.0);
     if(TAA == ON){

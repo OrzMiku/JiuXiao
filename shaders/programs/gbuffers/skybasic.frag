@@ -1,20 +1,16 @@
 #include "/libs/functions.glsl"
 
-// Inputs
-
-in vec4 glColor;
-
 // Uniforms
-
 #include "/libs/uniforms.glsl"
 
-// Outputs
+// Inputs
+in vec4 glColor;
 
+// Outputs
 /* RENDERTARGETS: 0 */
 layout(location = 0) out vec4 color;
 
 // Functions
-
 vec3 screenToView(vec3 screenPos) {
 	vec3 ndcPos = screenPos * 2.0 - 1.0;
     return projectAndDivide(gbufferProjectionInverse, ndcPos);
@@ -29,6 +25,7 @@ vec3 calcSkyColor(vec3 pos) {
 	return mix(skyColor, fogColor * clamp(sunIntensity, 0.0, 1.0), fogify(max(upDot, 0.0), 0.25));
 }
 
+// Main
 void main(){
     if(renderStage == MC_RENDER_STAGE_STARS){
         color = glColor;

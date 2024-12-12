@@ -1,16 +1,13 @@
 #include "/libs/settings.glsl"
 
 // Outputs
-
 out vec4 glColor;
 out vec2 texCoord;
 
 // Functions
-
 #include "/libs/shadow.glsl"
 
 // Main
-
 void main(){
     gl_Position = ftransform();
     gl_Position.xyz = distortShadowClipPos(gl_Position.xyz);

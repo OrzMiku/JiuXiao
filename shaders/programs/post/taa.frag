@@ -1,10 +1,11 @@
 #include "/libs/settings.glsl"
 #include "/libs/functions.glsl"
 
+// Uniforms
+#include "/libs/uniforms.glsl"
+
 // Constants
-
 const bool colortex1Clear = false;
-
 const vec2 neighbourhoodOffsets[8] = vec2[8](
     vec2(-1.0, -1.0),
     vec2( 0.0, -1.0),
@@ -17,21 +18,14 @@ const vec2 neighbourhoodOffsets[8] = vec2[8](
 );
 
 // Inputs
-
 in vec2 texCoord;
 
-// Uniforms
-
-#include "/libs/uniforms.glsl"
-
 // Outputs
-
 /* RENDERTARGETS: 0,1 */
 layout(location = 0) out vec4 color;
 layout(location = 1) out vec4 prevColor;
 
 // Functions
-
 vec2 Reprojection(vec2 coord, float depth){
     vec3 ndcPos = vec3(coord, depth) * 2.0 - 1.0;
     vec3 viewPos = projectAndDivide(gbufferProjectionInverse, ndcPos);
@@ -70,7 +64,6 @@ vec3 TemporalAA(vec3 color){
 }
 
 // Main
-
 void main(){
     color = texture(colortex0, texCoord);
     if(TAA == ON){

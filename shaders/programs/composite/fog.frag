@@ -1,28 +1,24 @@
 #include "/libs/settings.glsl"
-#include "/libs/functions.glsl"
+
+// Uniforms
+#include "/libs/uniforms.glsl"
+
 
 // Outputs
-
 /* RENDERTARGETS: 0 */
 layout(location = 0) out vec4 color;
 
 // Inputs
-
 in vec2 texCoord;
 
-// Uniforms
-
-#include "/libs/uniforms.glsl"
-
 // Functions
-
+#include "/libs/functions.glsl"
 vec3 screenToView(vec3 screenPos) {
 	vec3 ndcPos = screenPos * 2.0 - 1.0;
     return projectAndDivide(gbufferProjectionInverse, ndcPos);
 }
 
 // Main
-
 void main()
 {
     color = texture(colortex0, texCoord);

@@ -1,22 +1,18 @@
 #include "/libs/settings.glsl"
 
-// Attributes
+// Uniforms
+#include "/libs/uniforms.glsl"
 
+// Attributes
 in ivec2 vaUV2;
 in vec3 vaPosition;
 in vec4 vaColor;
 
 // Outputs
-
 out vec2 lmCoord;
 out vec4 glColor;
 
-// Uniforms
-
-#include "/libs/uniforms.glsl"
-
 // Main
-
 void main(){
     gl_Position = projectionMatrix * modelViewMatrix * vec4(vaPosition, 1.0);
     if(TAA == ON){
