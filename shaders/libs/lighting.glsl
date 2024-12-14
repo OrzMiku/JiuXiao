@@ -20,6 +20,9 @@ vec3 calcLighting(vec3 color){
     float bias = max(0.0005 * (1.0 - dot(normal, normalize(lightDir))), 0.00005) + 0.05 * exp(-8 * (1.0 - dist));
 
     vec3 shadow = PCF(shadowClipPos, bias);
+    if(SHADOW_ATTENUATION){
+         shadow = shadow * (1 - dist) + dist;
+    }
 
     vec2 lightmap = texture(colortex3, texCoord).rg;
     vec3 blocklight = lightmap.r * blocklightColor;

@@ -167,3 +167,27 @@ vec3 gaussianBlur(sampler2D src, vec2 uv, vec2 resolution, float radius, float s
   }
   return color / total;
 }
+
+vec3 gaussianBlur_H(sampler2D src, vec2 uv, vec2 resolution, float radius, float sigma){
+  vec3 color = vec3(0.0);
+  float total = 0.0;
+  for(float x = -radius; x <= radius; x++){
+    float weight = exp(-x * x / (2.0 * sigma * sigma));
+    vec2 samplePos = uv + vec2(x, 0.0) / resolution;
+    color += texture2D(src, samplePos).rgb * weight;
+    total += weight;
+  }
+  return color / total;
+}
+
+vec3 gaussianBlur_V(sampler2D src, vec2 uv, vec2 resolution, float radius, float sigma){
+  vec3 color = vec3(0.0);
+  float total = 0.0;
+  for(float y = -radius; y <= radius; y++){
+    float weight = exp(-y * y / (2.0 * sigma * sigma));
+    vec2 samplePos = uv + vec2(0.0, y) / resolution;
+    color += texture2D(src, samplePos).rgb * weight;
+    total += weight;
+  }
+  return color / total;
+}
