@@ -26,7 +26,8 @@ void main()
             color.rgb = gaussianBlur_V(colortex0, texCoord, screenSize, BLUR_RADIUS, BLUR_SIGMA);
         #endif
     }
-    if(AGX) {
-        color.rgb = agx(color.rgb);
-    }
+
+    #ifdef FINAL
+        if(AGX) color.rgb = agx(color.rgb);
+    #endif
 }
