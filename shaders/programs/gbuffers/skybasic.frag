@@ -1,5 +1,3 @@
-#include "/libs/functions.glsl"
-
 // Uniforms
 #include "/libs/uniforms.glsl"
 
@@ -11,10 +9,7 @@ in vec4 glColor;
 layout(location = 0) out vec4 color;
 
 // Functions
-vec3 screenToView(vec3 screenPos) {
-	vec3 ndcPos = screenPos * 2.0 - 1.0;
-    return projectAndDivide(gbufferProjectionInverse, ndcPos);
-}
+#include "/libs/functions.glsl"
 
 float fogify(float x, float w) {
 	return w / (x * x + w);

@@ -13,17 +13,13 @@ in vec2 texCoord;
 
 // Functions
 #include "/libs/functions.glsl"
-vec3 screenToView(vec3 screenPos) {
-	vec3 ndcPos = screenPos * 2.0 - 1.0;
-    return projectAndDivide(gbufferProjectionInverse, ndcPos);
-}
 
 // Main
 void main()
 {
     color = texture(colortex0, texCoord);
 
-    if(FOG_TOGGLE == OFF) return;
+    if(!FOG_TOGGLE) return;
 
     float depth = texture(depthtex0, texCoord).r;
     vec3 viewPos = screenToView(vec3(texCoord, depth));
@@ -31,5 +27,5 @@ void main()
     float dist = length(viewPos) / far;
     float fogFactor = exp(-FOG_DENSITY * (1.0 - dist));
 
-    color.rgb = mix(color.rgb, fogColor * customFogColor * sunIntensity, clamp(fogFactor, 0.0, 1.0));
+    color.rgb = mix(color.rgb, fogColor * vec3(FOG_COLOR_R, FOG_COLOR_G, FOG_COLOR_B) * sunIntensity, clamp(fogFactor, 0.0, 1.0));
 }

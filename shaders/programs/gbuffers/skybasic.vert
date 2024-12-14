@@ -13,7 +13,7 @@ out vec4 glColor;
 // Main
 void main(){
     gl_Position = projectionMatrix * modelViewMatrix * vec4(vaPosition, 1.0);
-    if(TAA == ON){
+    if(TAA){
         gl_Position.xy += taaOffset * gl_Position.w;
     }
 

@@ -25,7 +25,6 @@ uniform vec2 taaOffset;
 
 uniform vec3 shadowLightPosition;
 uniform vec3 fogColor;
-uniform vec3 customFogColor;
 uniform vec3 upPosition;
 uniform vec3 skyColor;
 uniform vec3 chunkOffset;
