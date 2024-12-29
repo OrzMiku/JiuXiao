@@ -2,4 +2,4 @@
 
 #define SHADOW_FRAG
 
-#include "/programs/composite/lighting.frag"
+#include "/programs/composite/composite.frag"
