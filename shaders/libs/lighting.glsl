@@ -1,9 +1,8 @@
-vec3 drawSun(vec3 rayDir, vec3 lightDir) {
+float drawSun(vec3 rayDir, vec3 lightDir) {
     float cosAngle = max(dot(rayDir, lightDir), 0.0);
-    const float sunRadius = 0.03;
+    const float sunRadius = 0.02;
     float theta = acos(cosAngle);
-    if (theta < sunRadius) return vec3(1.0);
-    else return vec3(0.0);
+    return theta > sunRadius ? exp(-128.0 * (theta - sunRadius)) : 1.0;
 }
 
 vec3 exposure(vec3 color, float factor) {
