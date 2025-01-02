@@ -1,15 +1,19 @@
+vec3 drawSun(vec3 rayDir, vec3 lightDir) {
+    float cosAngle = max(dot(rayDir, lightDir), 0.0);
+    const float sunRadius = 0.03;
+    float theta = acos(cosAngle);
+    if (theta < sunRadius) return vec3(1.0);
+    else return vec3(0.0);
+}
+
 vec3 exposure(vec3 color, float factor) {
     float skylight = float(eyeBrightnessSmooth.y) / 240;
     skylight = pow(skylight, 6.0) * factor + (1.0f - factor);
     return color / skylight;
 }
 
-vec3 calcLighting(vec3 color){
-    float depth = texture(depthtex0, texCoord).r;
-    if(depth == 1.0) return vec3(1.0);
-    vec3 NDCPos = vec3(texCoord.xy, depth) * 2.0 - 1.0;
-    vec3 viewPos = projectAndDivide(gbufferProjectionInverse, NDCPos);
-    vec3 feetPlayerPos = (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
+vec3 calcLighting(vec3 color, vec3 feetPlayerPos){
+
     vec3 shadowViewPos = (shadowModelView * vec4(feetPlayerPos, 1.0)).xyz;
     vec4 shadowClipPos = shadowProjection * vec4(shadowViewPos, 1.0);
 
@@ -39,12 +43,12 @@ vec3 calcLighting(vec3 color){
     sunlight *= sunIntensity * shadow;
     skylight *= sunIntensity;
 
-    return (blocklight + skylight + ambient + sunlight);
+    return blocklight + skylight + ambient + sunlight;
 }
 
-void applyLighting(){
+void applyLighting(vec3 feetPlayerPos){
     color.rgb = pow(color.rgb, vec3(2.2));
-    color.rgb *= calcLighting(color.rgb);
+    color.rgb *= calcLighting(color.rgb, feetPlayerPos);
     color.rgb = exposure(color.rgb, 0.7);
     color.rgb = pow(color.rgb, vec3(1.0 / 2.2));
 }

@@ -10,7 +10,8 @@
 
 #define TAA true // [true false]
 
-#define AGX true // [true false]
+#define AGX false // [true false]
+#define AGX_LOOK 0 // [0 1 2]
 
 #define WHITE_WORLD false // [true false]
 

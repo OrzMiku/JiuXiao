@@ -1,9 +1,9 @@
-vec3 distortShadowClipPos(vec3 shadowClipPos){
-  float distortionFactor = length(shadowClipPos.xy); // distance from the player in shadow clip space
-  distortionFactor += 0.1; // very small distances can cause issues so we add this to slightly reduce the distortion
+const float shadowMapBias = 0.95;
 
+vec3 distortShadowClipPos(vec3 shadowClipPos){
+  float distortionFactor = length(shadowClipPos.xy) * shadowMapBias + (1.0 - shadowMapBias);
   shadowClipPos.xy /= distortionFactor;
-  shadowClipPos.z *= 0.25; // increases shadow distance on the Z axis, which helps when the sun is very low in the sky
+  shadowClipPos.z *= 0.25;
   return shadowClipPos;
 }
 

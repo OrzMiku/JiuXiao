@@ -77,7 +77,13 @@ vec3 agx(vec3 color) {
           - 0.00232;
 
   // 2. agxLook()
-    color = agxAscCdl(color, vec3(1.18), vec3(0.0), vec3(1.35), 1.4);
+  #if AGX_LOOK == 1
+    // Golden
+    color = agxAscCdl(color, vec3(1.0, 0.9, 0.5), vec3(0.0), vec3(0.8), 1.3);
+  #elif AGX_LOOK == 2
+    // Punchy
+    color = agxAscCdl(color, vec3(1.0), vec3(0.0), vec3(1.35), 1.4);
+  #endif
 
   // 3. agxEotf()
   // Inverse input transform (outset)
