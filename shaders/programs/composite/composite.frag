@@ -34,6 +34,9 @@ void main()
 
     // Sky
     if(depth == 1.0){
+        vec4 clipPos = gbufferProjection * vec4(viewPos, 1.0);
+        clipPos.xy += taaOffset * clipPos.w;
+        viewPos = (gbufferProjectionInverse * clipPos).xyz;
         color.rgb += drawSun(normalize(viewPos), normalize(shadowLightPosition));
         return;
     }
