@@ -93,7 +93,7 @@ void main(){
     // World time
     float lightIntensity = 0.0;
     if(worldTime >= 23000 && worldTime < 24000) {
-        lightIntensity = 24000 - worldTime / 1000.0;
+        lightIntensity = (24000 - worldTime) / 1000.0;
     }else if(worldTime >= 0 && worldTime < 12000) {
         lightIntensity = 1.0;
     }else if(worldTime >= 12000 && worldTime < 13000) {
@@ -101,6 +101,7 @@ void main(){
     }else if(worldTime >= 13000 && worldTime < 23000) {
         lightIntensity = 0.0;
     }
+
     lightIntensity = 0.1 + lightIntensity * 0.9;
 
     // Diffuse lighting
