@@ -3,15 +3,21 @@
 
 // Inputs
 in vec2 texCoord;
-in vec4 glColor;
+in vec4 tint;
 
 // Outputs
 /* RENDERTARGETS: 0 */
-layout (location = 0) out vec4 color;
+layout(location = 0) out vec4 color;
 
 // Main
 void main(){
-    color = texture(gtexture, texCoord) * glColor;
+    color = texture(colortex0, texCoord) * tint;
 
-    if(color.a < alphaTestRef) discard;
+    // Alpha test
+    if(color.a < alphaTestRef){
+        discard;
+    }
+
+    // Gamma correction
+    color.rgb = pow(color.rgb, vec3(2.2));
 }

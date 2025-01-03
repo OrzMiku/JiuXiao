@@ -1,5 +1,3 @@
-#version 460 core
+#version 330 compatibility
 
-#define SHADOW_FRAG
-
-#include "/programs/composite/composite.frag"
+#include "/programs/composite/lighting.frag"

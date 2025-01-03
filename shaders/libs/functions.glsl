@@ -1,27 +1,29 @@
-vec3 projectAndDivide(mat4 projectionMatrix, vec3 position){
-  vec4 homPos = projectionMatrix * vec4(position, 1.0);
-  return homPos.xyz / homPos.w;
+vec3 projectAndDivide(mat4 projection, vec3 pos) {
+    vec4 clip = projection * vec4(pos, 1.0);
+    return clip.xyz / clip.w;
 }
 
-vec3 screenToView(vec3 screenPos) {
-	vec3 ndcPos = screenPos * 2.0 - 1.0;
-    return projectAndDivide(gbufferProjectionInverse, ndcPos);
+vec3 screenToView(vec2 screenPos, float depth) {
+    vec3 NDCPos = vec3(screenPos, depth) * 2.0 - 1.0;
+    return projectAndDivide(gbufferProjectionInverse, NDCPos);
 }
 
-float luminance(vec3 color){
-  return dot(color, vec3(0.2126, 0.7152, 0.0722));
+vec3 viewToFeetPlayer(vec3 viewPos) {
+    return (gbufferModelViewInverse * vec4(viewPos, 1.0)).xyz;
 }
 
-vec3 gaussianBlur(sampler2D src, vec2 uv, vec2 resolution, float radius, float sigma){
-  vec3 color = vec3(0.0);
-  float total = 0.0;
-  for(float x = -radius; x <= radius; x++){
-    for(float y = -radius; y <= radius; y++){
-      float weight = exp(-(x * x + y * y) / (2.0 * sigma * sigma));
-      vec2 samplePos = uv + vec2(x, y) / resolution;
-      color += texture2D(src, samplePos).rgb * weight;
-      total += weight;
-    }
-  }
-  return color / total;
+vec3 viewToEyePlayer(vec3 viewPos) {
+    return mat3(gbufferModelViewInverse) * viewPos;
+}
+
+vec3 feetPlayerToShadowView(vec3 feetPlayerPos) {
+    return (shadowModelView * vec4(feetPlayerPos, 1.0)).xyz;
+}
+
+vec3 distortShadowClipPos(vec3 shadowClipPos) {
+    float dist = length(shadowClipPos.xy);
+    float distortionFactor = dist * 0.9 + 0.1;
+    shadowClipPos.xy /= distortionFactor;
+    shadowClipPos.z *= 0.25;
+    return shadowClipPos;
 }

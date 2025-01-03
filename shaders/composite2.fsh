@@ -1,3 +1,3 @@
-#version 460 core
+#version 330 compatibility
 
-#include "/programs/composite/composite2.frag"
+#include "/programs/composite/taa.frag"

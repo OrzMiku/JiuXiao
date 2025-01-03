@@ -1,25 +1,22 @@
+// Settings
 #include "/libs/settings.glsl"
 
 // Uniforms
 #include "/libs/uniforms.glsl"
 
-// Attributes
-in vec2 vaUV0;
-in vec3 vaPosition;
-in vec4 vaColor;
-
 // Outputs
-out vec4 glColor;
 out vec2 texCoord;
+out vec4 tint;
 
 // Functions
-#include "/libs/shadow.glsl"
+#include "/libs/functions.glsl"
 
 // Main
 void main(){
-    gl_Position =  projectionMatrix * modelViewMatrix * vec4(vaPosition + chunkOffset, 1.0);
+    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
     gl_Position.xyz = distortShadowClipPos(gl_Position.xyz);
-
-    texCoord = (textureMatrix * vec4(vaUV0, 0.0, 1.0)).xy;
-    glColor = vaColor;
+    
+    texCoord = (gl_TextureMatrix[0] * gl_MultiTexCoord0).xy;
+    
+    tint = gl_Color;
 }

@@ -1,21 +1,19 @@
+// Settings
 #include "/libs/settings.glsl"
 
 // Uniforms
 #include "/libs/uniforms.glsl"
 
-// Attributes
-in vec3 vaPosition;
-in vec4 vaColor;
-
 // Outputs
-out vec4 glColor;
+out vec4 tint;
+
+// Functions
+#include "/libs/functions.glsl"
 
 // Main
 void main(){
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(vaPosition, 1.0);
-    if(TAA){
-        gl_Position.xy += taaOffset * gl_Position.w;
-    }
-
-    glColor = vaColor;
+    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
+    if(TAA) gl_Position.xy += taaOffset * gl_Position.w;
+    
+    tint = gl_Color;
 }

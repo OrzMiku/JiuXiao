@@ -1,15 +1,18 @@
+// Settings
+#include "/libs/settings.glsl"
+
 // Uniforms
 #include "/libs/uniforms.glsl"
 
-// Attributes
-in vec2 vaUV0;
-in vec3 vaPosition;
-
 // Outputs
 out vec2 texCoord;
+out vec2 lmCoord;
+out vec3 normal;
+out vec4 tint;
 
 // Main
 void main(){
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(vaPosition, 1.0);
-    texCoord = vaUV0;
+    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
+    
+    texCoord = gl_MultiTexCoord0.xy;
 }

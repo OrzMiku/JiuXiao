@@ -1,3 +1,5 @@
-#version 460 core
+#version 330 compatibility
 
-#include "/programs/gbuffers/entities.vert"
+#define ENTITIES
+
+#include "/programs/gbuffers/textured.vert"

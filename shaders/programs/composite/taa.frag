@@ -1,10 +1,11 @@
+// Settings
 #include "/libs/settings.glsl"
 
 // Uniforms
 #include "/libs/uniforms.glsl"
 
 // Constants
-const bool colortex1Clear = false;
+const bool colortex4Clear = false;
 const vec2 neighbourhoodOffsets[8] = vec2[8](
     vec2(-1.0, -1.0),
     vec2( 0.0, -1.0),
@@ -20,7 +21,7 @@ const vec2 neighbourhoodOffsets[8] = vec2[8](
 in vec2 texCoord;
 
 // Outputs
-/* RENDERTARGETS: 0,1 */
+/* RENDERTARGETS: 0,4 */
 layout(location = 0) out vec4 color;
 layout(location = 1) out vec4 prevColor;
 
@@ -52,7 +53,7 @@ vec3 colorClamp(vec3 color, vec3 tempColor, vec2 viewInv){
 
 vec3 TemporalAA(vec3 color){
     vec2 prevCoord = Reprojection(texCoord, texture(depthtex0, texCoord).r);
-    vec3 prevColor = texture(colortex1, prevCoord).rgb;
+    vec3 prevColor = texture(colortex4, prevCoord).rgb;
     if(prevColor == vec3(0.0)) return color;
 
 	prevColor = colorClamp(color, prevColor, texelSize);
